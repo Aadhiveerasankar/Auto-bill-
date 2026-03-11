@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bill Calculator</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f4f4;
+text-align:center;
+padding:30px;
+}
+
+.container{
+background:white;
+padding:20px;
+max-width:500px;
+margin:auto;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+font-size:18px;
+}
+
+button{
+padding:12px 20px;
+font-size:18px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.bill{
+margin-top:30px;
+background:white;
+padding:40px;
+font-size:28px;
+line-height:1.8;
+}
+
+.total{
+color:green;
+font-weight:bold;
+font-size:36px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Customer Bill Calculator</h2>
+
+<input id="value1" placeholder="Amount 1">
+<input id="value2" placeholder="Amount 2">
+
+<input id="pay1" placeholder="Payment 1">
+<input id="pay2" placeholder="Payment 2">
+<input id="pay3" placeholder="Payment 3">
+<input id="pay4" placeholder="Payment 4">
+
+<button onclick="calculate()">Calculate</button>
+
+<button onclick="download()">Download Image</button>
+
+</div>
+
+<div id="bill" class="bill">
+
+</div>
+
+<script>
+
+function calculate(){
+
+let v1 = Number(document.getElementById("value1").value)
+let v2 = Number(document.getElementById("value2").value)
+
+let p1 = Number(document.getElementById("pay1").value)
+let p2 = Number(document.getElementById("pay2").value)
+let p3 = Number(document.getElementById("pay3").value)
+let p4 = Number(document.getElementById("pay4").value)
+
+let total = v1 + v2
+
+let r1 = total - p1
+let r2 = r1 - p2
+let r3 = r2 - p3
+let r4 = r3 - p4
+
+document.getElementById("bill").innerHTML = `
+
+₹${v1.toLocaleString()} + ₹${v2.toLocaleString()}  
+= ₹${total.toLocaleString()}
+
+<hr>
+
+₹${total.toLocaleString()} - ₹${p1.toLocaleString()}  
+= ₹${r1.toLocaleString()}
+
+- ₹${p2.toLocaleString()}  
+= ₹${r2.toLocaleString()}
+
+- ₹${p3.toLocaleString()}  
+= ₹${r3.toLocaleString()}
+
+- ₹${p4.toLocaleString()}  
+= <div class="total">₹${r4.toLocaleString()}</div>
+
+`
+
+}
+
+function download(){
+
+html2canvas(document.querySelector("#bill")).then(canvas => {
+
+let link = document.createElement("a")
+
+link.download = "bill.png"
+
+link.href = canvas.toDataURL()
+
+link.click()
+
+})
+
+}
+
+</script>
+
+</body>
+  </html>
