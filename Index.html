@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Sreerama Bill</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+background:#f5f5f5;
+font-family:Arial;
+padding:20px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:6px 0;
+font-size:16px;
+}
+
+button{
+padding:10px;
+font-size:16px;
+margin-top:10px;
+cursor:pointer;
+}
+
+.bill{
+
+margin-top:30px;
+background:white;
+
+font-family:'Patrick Hand', cursive;
+
+text-align:center;
+
+font-size:34px;
+
+line-height:1.9;
+
+padding:60px;
+
+}
+
+.title{
+
+font-size:50px;
+
+margin-bottom:40px;
+
+}
+
+.line{
+
+border-bottom:2px solid black;
+
+display:inline-block;
+
+padding-bottom:5px;
+
+}
+
+.final{
+
+color:green;
+
+font-size:44px;
+
+font-weight:bold;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Granite Bill Calculator</h2>
+
+<input id="amount1" placeholder="Amount 1">
+<input id="amount2" placeholder="Amount 2">
+
+<input id="pay1" placeholder="Payment 1">
+<input id="pay2" placeholder="Payment 2">
+<input id="pay3" placeholder="Payment 3">
+
+<button onclick="calculate()">Generate Bill</button>
+
+<button onclick="download()">Download Image</button>
+
+</div>
+
+<div id="bill" class="bill"></div>
+
+<script>
+
+function getVal(id){
+let v=document.getElementById(id).value
+return v==""?0:Number(v)
+}
+
+function calculate(){
+
+let a1=getVal("amount1")
+let a2=getVal("amount2")
+
+let p1=getVal("pay1")
+let p2=getVal("pay2")
+let p3=getVal("pay3")
+
+let total=a1+a2
+
+let r1=total-p1
+let r2=r1-p2
+let r3=r2-p3
+
+document.getElementById("bill").innerHTML=`
+
+<div class="title">శ్రీరామ</div>
+
+${a1.toLocaleString()} + ${a2.toLocaleString()} =
+<span class="line">${total.toLocaleString()}</span>
+
+<br><br>
+
+- ${p1.toLocaleString()}
+
+<br>
+
+<span class="line">${r1.toLocaleString()}</span>
+
+<br><br>
+
+- ${p2.toLocaleString()}
+
+<br>
+
+<span class="line">${r2.toLocaleString()}</span>
+
+<br><br>
+
+- ${p3.toLocaleString()}
+
+<br><br>
+
+<div class="final">
+${r3.toLocaleString()}
+</div>
+
+`
+
+}
+
+function download(){
+
+html2canvas(document.querySelector("#bill")).then(canvas=>{
+
+let link=document.createElement("a")
+
+link.download="bill.png"
+
+link.href=canvas.toDataURL()
+
+link.click()
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
