@@ -1,55 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Bill Calculator</title>
+<title>Granite Billing</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 
 body{
-font-family: Arial;
+font-family:Arial;
 background:#f4f4f4;
-text-align:center;
-padding:30px;
+padding:20px;
 }
 
 .container{
+max-width:600px;
+margin:auto;
 background:white;
 padding:20px;
-max-width:500px;
-margin:auto;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 input{
 width:100%;
 padding:10px;
-margin:8px 0;
-font-size:18px;
+margin:6px 0;
+font-size:16px;
 }
 
 button{
-padding:12px 20px;
-font-size:18px;
+padding:10px 15px;
 margin-top:10px;
+font-size:16px;
 cursor:pointer;
 }
 
 .bill{
 margin-top:30px;
 background:white;
-padding:40px;
-font-size:28px;
-line-height:1.8;
+padding:30px;
+font-size:22px;
+line-height:1.7;
 }
 
 .total{
-color:green;
+font-size:28px;
 font-weight:bold;
-font-size:36px;
+color:green;
 }
 
 </style>
@@ -59,63 +58,107 @@ font-size:36px;
 
 <div class="container">
 
-<h2>Customer Bill Calculator</h2>
+<h2>Granite Bill Calculator</h2>
 
-<input id="value1" placeholder="Amount 1">
-<input id="value2" placeholder="Amount 2">
+<label>Total SFT</label>
+<input id="totalsft">
 
-<input id="pay1" placeholder="Payment 1">
-<input id="pay2" placeholder="Payment 2">
-<input id="pay3" placeholder="Payment 3">
-<input id="pay4" placeholder="Payment 4">
+<h3>Materials</h3>
+
+<input id="name1" placeholder="Material name">
+<input id="sft1" placeholder="SFT">
+<input id="rate1" placeholder="Rate">
+
+<input id="name2" placeholder="Material name">
+<input id="sft2" placeholder="SFT">
+<input id="rate2" placeholder="Rate">
+
+<input id="name3" placeholder="Material name">
+<input id="sft3" placeholder="SFT">
+<input id="rate3" placeholder="Rate">
+
+<label>GST %</label>
+<input id="gst">
+
+<label>Loading</label>
+<input id="loading">
+
+<h3>RTGS Payments</h3>
+
+<input id="rtgs1" placeholder="RTGS 1">
+<input id="rtgs2" placeholder="RTGS 2">
+<input id="rtgs3" placeholder="RTGS 3">
 
 <button onclick="calculate()">Calculate</button>
 
-<button onclick="download()">Download Image</button>
+<button onclick="download()">Download Bill Image</button>
 
 </div>
 
-<div id="bill" class="bill">
-
-</div>
+<div id="bill" class="bill"></div>
 
 <script>
 
 function calculate(){
 
-let v1 = Number(document.getElementById("value1").value)
-let v2 = Number(document.getElementById("value2").value)
+let totalsft = Number(document.getElementById("totalsft").value)
 
-let p1 = Number(document.getElementById("pay1").value)
-let p2 = Number(document.getElementById("pay2").value)
-let p3 = Number(document.getElementById("pay3").value)
-let p4 = Number(document.getElementById("pay4").value)
+let sft1 = Number(document.getElementById("sft1").value)
+let rate1 = Number(document.getElementById("rate1").value)
 
-let total = v1 + v2
+let sft2 = Number(document.getElementById("sft2").value)
+let rate2 = Number(document.getElementById("rate2").value)
 
-let r1 = total - p1
-let r2 = r1 - p2
-let r3 = r2 - p3
-let r4 = r3 - p4
+let sft3 = Number(document.getElementById("sft3").value)
+let rate3 = Number(document.getElementById("rate3").value)
+
+let gst = Number(document.getElementById("gst").value)
+
+let loading = Number(document.getElementById("loading").value)
+
+let rtgs1 = Number(document.getElementById("rtgs1").value)
+let rtgs2 = Number(document.getElementById("rtgs2").value)
+let rtgs3 = Number(document.getElementById("rtgs3").value)
+
+let m1 = sft1 * rate1
+let m2 = sft2 * rate2
+let m3 = sft3 * rate3
+
+let materialTotal = m1 + m2 + m3
+
+let gstValue = materialTotal * gst / 100
+
+let mining = totalsft * 7
+
+let total = materialTotal + gstValue + mining + loading
+
+let pending = total - rtgs1 - rtgs2 - rtgs3
 
 document.getElementById("bill").innerHTML = `
 
-₹${v1.toLocaleString()} + ₹${v2.toLocaleString()}  
-= ₹${total.toLocaleString()}
+${sft1} × ${rate1} = ${m1.toLocaleString()} <br>
+${sft2} × ${rate2} = ${m2.toLocaleString()} <br>
+${sft3} × ${rate3} = ${m3.toLocaleString()} <br><br>
 
-<hr>
+Material Total = ${materialTotal.toLocaleString()} <br>
 
-₹${total.toLocaleString()} - ₹${p1.toLocaleString()}  
-= ₹${r1.toLocaleString()}
+GST ${gst}% = ${gstValue.toLocaleString()} <br><br>
 
-- ₹${p2.toLocaleString()}  
-= ₹${r2.toLocaleString()}
+Mining <br>
+${totalsft} × 7 = ${mining.toLocaleString()} <br><br>
 
-- ₹${p3.toLocaleString()}  
-= ₹${r3.toLocaleString()}
+Loading = ${loading.toLocaleString()} <br><br>
 
-- ₹${p4.toLocaleString()}  
-= <div class="total">₹${r4.toLocaleString()}</div>
+TOTAL = ${total.toLocaleString()} <br><br>
+
+RTGS <br>
+- ${rtgs1.toLocaleString()} <br>
+- ${rtgs2.toLocaleString()} <br>
+- ${rtgs3.toLocaleString()} <br><br>
+
+<div class="total">
+Pending = ${pending.toLocaleString()}
+</div>
 
 `
 
@@ -140,4 +183,4 @@ link.click()
 </script>
 
 </body>
-  </html>
+</html>
